@@ -1,5 +1,9 @@
-# AER论文原文（体积大，文件名过长）
+# AER论文原文
 AER2020-2021/
+paper_texts/
+
+# Stata 数据清洗脚本（项目特定，不纳入）
+*.do
 
 # Python缓存
 __pycache__/
@@ -10,9 +14,10 @@ __pycache__/
 *.dta
 *.xlsx
 *.xls
+*.csv
 ai_econometrics/
 
-# 生成的结果文件（项目相关，不纳入版本控制）
+# 流水线生成的结果文件
 ECO_*.md
 tables/
 

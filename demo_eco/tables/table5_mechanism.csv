@@ -1,0 +1,5 @@
+﻿Step,var,beta,SE,p
+1: X->Y (total effect),did,0.1071,0.004,0.0
+2: X->M (patent channel),did,0.1587,0.0066,0.0
+3: X+M->Y (direct effect),did,0.101,0.0045,0.0
+3: X+M->Y (M coef),ln_patent,0.0382,0.013,0.004

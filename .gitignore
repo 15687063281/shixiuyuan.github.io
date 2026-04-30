@@ -1,26 +1,10 @@
-# AER论文原文
-AER2020-2021/
-paper_texts/
-
-# Stata 数据清洗脚本（项目特定，不纳入）
-*.do
-
-# Python缓存
+tectonic.exe
+tectonic.zip
+*.aux
+*.log
+*.toc
+*.out
+*.synctex.gz
 __pycache__/
 *.pyc
-*.pyo
-
-# 数据文件
-*.dta
-*.xlsx
-*.xls
-*.csv
-ai_econometrics/
-
-# 流水线生成的结果文件
-ECO_*.md
-tables/
-
-# 系统文件
 .DS_Store
-Thumbs.db

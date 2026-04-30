@@ -1,0 +1,6 @@
+﻿Spec,beta,SE,p
+Main TWFE,0.1071,0.004,0.0
+Winsorized Y,0.1085,0.0045,0.0
+Drop treat yr1,0.1071,0.0044,0.0
+Excl. 2016,0.1066,0.0042,0.0
+Region x Year FE,0.1079,0.004,0.0

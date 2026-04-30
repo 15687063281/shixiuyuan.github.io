@@ -16,13 +16,41 @@
 
 ---
 
+## 演示
+
+**视频演示：** [`demo.mp4`](./demo.mp4) — 完整流水线从数据到 PDF 的全过程录屏
+
+**示例项目：** [`demo_eco/`](./demo_eco/) — 以"宽带中国试点政策对县级制造业TFP的影响"为研究主题的完整示例
+
+```
+demo_eco/
+├── broadband_china.csv       示例数据（300县 × 2010-2018，N=2700）
+├── paper.tex / paper.pdf     最终论文（LaTeX源码 + 编译好的PDF）
+├── ECO_BRIEF.md              研究简报
+├── ECO_DATA_PROFILE.md       数据探索档案
+├── ECO_BACKGROUND.md         政策制度背景（含URL来源）
+├── ECO_LIT.md                文献调研档案
+├── ECO_REFS_VERIFIED.md      引用核查报告
+├── ECO_CONTRIBUTION.md       贡献声明
+├── ECO_RESULTS.md            实证结果档案
+├── ECO_PAPER_DRAFT.md        论文草稿（Markdown版）
+└── tables/                   所有回归表格 + 事件研究图
+```
+
+> 直接打开 `demo_eco/paper.pdf` 查看最终产出效果。
+
+---
+
 ## 快速开始
 
 ### 安装
 
 ```bash
-# 复制 skills 到 Claude Code 的技能目录
-cp -r E:/Auto_eco/skills/* C:/Users/<你的用户名>/.claude/skills/
+# 复制 skills 到 Claude Code 的技能目录（Windows）
+cp -r ./skills/* C:/Users/<你的用户名>/.claude/skills/
+
+# macOS / Linux
+cp -r ./skills/* ~/.claude/skills/
 
 # 安装 Python 依赖
 pip install pyfixest linearmodels statsmodels pandas numpy scipy openpyxl matplotlib seaborn csdid

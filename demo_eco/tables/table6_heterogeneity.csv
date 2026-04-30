@@ -1,0 +1,7 @@
+﻿Subgroup,beta_did,SE,p,beta_interaction
+Region=East,0.1403,0.0063,0.0,
+Region=Central,0.0977,0.0066,0.0,
+Region=West,0.0836,0.0064,0.0,
+Size=Large,0.1279,0.0053,0.0,
+Size=Small,0.0877,0.0054,0.0,
+Triple: East x DID,0.0946,0.0041,0.0,0.0397

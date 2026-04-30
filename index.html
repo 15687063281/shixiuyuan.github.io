@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auto-Eco：全自动计量经济学论文写作系统</title>
+  <style>
+    /* ---- Reset & Base ---- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      color: #1a1a2e;
+      background: #fafafa;
+      line-height: 1.7;
+    }
+
+    /* ---- Layout ---- */
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+    /* ---- Hero ---- */
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #fff;
+      padding: 72px 0 56px;
+      text-align: center;
+    }
+    .hero .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+      color: #a8d8ea;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 46px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .hero h1 span { color: #e94560; }
+    .hero .subtitle {
+      font-size: 18px;
+      color: rgba(255,255,255,0.72);
+      margin-bottom: 32px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: #e94560;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #c73652; transform: translateY(-1px); }
+    .btn-outline {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.16); transform: translateY(-1px); }
+    .btn svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
+
+    /* ---- Section ---- */
+    section { padding: 64px 0; }
+    section:nth-child(even) { background: #fff; }
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #e94560;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(22px, 3.5vw, 32px);
+      font-weight: 700;
+      margin-bottom: 14px;
+      line-height: 1.25;
+    }
+    .section-desc {
+      font-size: 16px;
+      color: #555;
+      max-width: 680px;
+      margin-bottom: 40px;
+    }
+
+    /* ---- Video ---- */
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+      background: #000;
+    }
+    .video-wrap video {
+      width: 100%;
+      display: block;
+    }
+
+    /* ---- Pipeline ---- */
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+    .pipeline::before {
+      content: '';
+      position: absolute;
+      left: 27px;
+      top: 28px;
+      bottom: 28px;
+      width: 2px;
+      background: linear-gradient(to bottom, #e94560, #0f3460);
+    }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 18px 0;
+    }
+    .step-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e94560, #0f3460);
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(233,69,96,0.35);
+      position: relative;
+      z-index: 1;
+    }
+    .step-body { padding-top: 6px; }
+    .step-body h3 { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+    .step-body p { font-size: 14px; color: #666; }
+    .step-body .tag {
+      display: inline-block;
+      background: #f0f4ff;
+      color: #0f3460;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 4px;
+      margin-top: 4px;
+      font-family: monospace;
+    }
+
+    /* ---- Output Gallery ---- */
+    .output-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .output-card {
+      background: #fff;
+      border: 1px solid #e8ecf4;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .output-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .output-card-img {
+      background: #f0f4ff;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #e8ecf4;
+    }
+    .output-card-img img {
+      max-width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+    }
+    .output-card-img .icon {
+      font-size: 48px;
+      line-height: 1;
+      padding: 20px 0;
+    }
+    .output-card-body { padding: 16px; }
+    .output-card-body h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .output-card-body p { font-size: 13px; color: #777; }
+
+    /* ---- Feature Grid ---- */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      padding: 24px;
+      background: #fff;
+      border: 1px solid #e8ecf4;
+      border-radius: 12px;
+      transition: box-shadow 0.2s;
+    }
+    .feature-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
+    .feature-icon { font-size: 28px; margin-bottom: 12px; }
+    .feature-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .feature-card p { font-size: 13px; color: #666; }
+
+    /* ---- Code ---- */
+    .code-block {
+      background: #1a1a2e;
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 24px 28px;
+      font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+      font-size: 14px;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+    .code-block .comment { color: #64748b; }
+    .code-block .cmd { color: #7dd3fc; }
+    .code-block .arg { color: #86efac; }
+    .code-block .path { color: #fbbf24; }
+
+    /* ---- Stats ---- */
+    .stats-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 40px 0 0;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 36px; font-weight: 800; color: #e94560; line-height: 1; }
+    .stat-label { font-size: 13px; color: #888; margin-top: 4px; }
+
+    /* ---- Footer ---- */
+    footer {
+      background: #1a1a2e;
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      padding: 40px 24px;
+      font-size: 14px;
+    }
+    footer a { color: rgba(255,255,255,0.75); text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    /* ---- Nav ---- */
+    nav {
+      background: rgba(26,26,46,0.95);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav .logo { color: #fff; font-weight: 700; font-size: 17px; text-decoration: none; }
+    nav .logo span { color: #e94560; }
+    nav .nav-links { display: flex; gap: 24px; }
+    nav .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+    nav .nav-links a:hover { color: #fff; }
+
+    @media (max-width: 600px) {
+      nav .nav-links { display: none; }
+      .stats-row { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="container">
+    <a href="#" class="logo">Auto-<span>Eco</span></a>
+    <div class="nav-links">
+      <a href="#demo">演示</a>
+      <a href="#pipeline">流程</a>
+      <a href="#output">产出</a>
+      <a href="#install">安装</a>
+      <a href="https://github.com/Jasper0122/auto-eco" target="_blank">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="container">
+    <div class="badge">AER 级规范 · 全自动 · Claude Code</div>
+    <h1>Auto-<span>Eco</span><br>全自动计量经济学论文写作系统</h1>
+    <p class="subtitle">给定研究主题和数据，自动完成文献调研、实证分析、论文写作，直接输出可投稿 PDF</p>
+    <div class="btn-row">
+      <a href="https://github.com/Jasper0122/auto-eco" target="_blank" class="btn btn-primary">
+        <svg viewBox="0 0 24 24"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+        GitHub
+      </a>
+      <a href="#demo" class="btn btn-outline">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        查看演示
+      </a>
+      <a href="demo_eco/paper.pdf" target="_blank" class="btn btn-outline">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        示例 PDF
+      </a>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">8</div><div class="stat-label">专用技能模块</div></div>
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">回归表格自动生成</div></div>
+      <div class="stat"><div class="stat-num">0</div><div class="stat-label">需要 Stata</div></div>
+      <div class="stat"><div class="stat-num">AER</div><div class="stat-label">规范内嵌</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Demo Video -->
+<section id="demo">
+  <div class="container">
+    <div class="section-label">Demo</div>
+    <h2 class="section-title">从数据到 PDF，全程自动</h2>
+    <p class="section-desc">以下演示以"宽带中国试点政策对县级制造业TFP的影响"为研究主题，展示系统如何在无需人工干预的情况下完成从数据到可投稿论文的全流程。</p>
+    <div class="video-wrap">
+      <video controls poster="">
+        <source src="demo.mp4" type="video/mp4" />
+        您的浏览器不支持视频播放，请<a href="demo.mp4">点击下载</a>。
+      </video>
+    </div>
+  </div>
+</section>
+
+<!-- Pipeline -->
+<section id="pipeline">
+  <div class="container">
+    <div class="section-label">Pipeline</div>
+    <h2 class="section-title">七步全自动流水线</h2>
+    <p class="section-desc">一条指令触发，各阶段顺序执行，状态文件跨步骤传递，确保前后一致性。</p>
+    <div class="pipeline">
+      <div class="step">
+        <div class="step-num">0</div>
+        <div class="step-body">
+          <h3>数据探索 <span class="tag">eco-data-explore</span></h3>
+          <p>自动识别面板结构、候选变量、识别策略信号（DiD / IV / RD），推荐 FE 组合与聚类层级。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>政策背景搜索 <span class="tag">eco-background</span></h3>
+          <p>WebSearch 官方文件 + 政策名单，建立处理批次时间线，每个事实附 URL 来源，为外生性叙事提供支撑。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>文献调研 <span class="tag">eco-lit-review</span></h3>
+          <p>6 轮 WebSearch（AEA / NBER / 机制 / 中国情境 / 综述），归纳 3–5 条文献脉络，提出可检验假设 H1/H2/H3。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>引用核查 <span class="tag">eco-ref-verify</span></h3>
+          <p>逐条 WebSearch 核查引用真实性，判定 ✅ PASS / ⚠ WARN / ❌ FAIL，自动拦截假引用。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>实证分析 <span class="tag">eco-analysis</span></h3>
+          <p>CS-DiD（Staggered 稳健）+ TWFE 对照，自动生成 Table 1–6 + 事件研究图，结构化安慰剂直接进 Table 2。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>贡献声明 <span class="tag">eco-contribution</span></h3>
+          <p>对比最近似已有文献，找出本文真实增量，起草 3 条有数字支撑的贡献声明。</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h3>论文写作 + PDF <span class="tag">eco-write-paper</span></h3>
+          <p>AER 8 段引言 + 完整正文 + 结论，LaTeX 编译输出可投稿 PDF，中文字体全程支持。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Output -->
+<section id="output">
+  <div class="container">
+    <div class="section-label">示例产出</div>
+    <h2 class="section-title">Demo 项目完整输出</h2>
+    <p class="section-desc">所有文件均来自 <code>demo_eco/</code> 目录，可直接下载查看。</p>
+    <div class="output-grid">
+      <div class="output-card">
+        <div class="output-card-img">
+          <img src="demo_eco/tables/figure1_event_study.png" alt="事件研究图" />
+        </div>
+        <div class="output-card-body">
+          <h4>事件研究图（CS-DiD）</h4>
+          <p>前4期系数均不显著，平行趋势成立；政策当年 ATT ≈ 0.11，效应持续稳定。</p>
+        </div>
+      </div>
+      <div class="output-card">
+        <a href="demo_eco/paper.pdf" target="_blank" style="text-decoration:none;color:inherit;">
+          <div class="output-card-img">
+            <div class="icon">📄</div>
+          </div>
+          <div class="output-card-body">
+            <h4>完整论文 PDF</h4>
+            <p>LaTeX 编译，AER 规范格式，含摘要、10 节正文、6 张回归表、1 张事件研究图、参考文献。</p>
+          </div>
+        </a>
+      </div>
+      <div class="output-card">
+        <div class="output-card-img">
+          <div class="icon">📊</div>
+        </div>
+        <div class="output-card-body">
+          <h4>Table 2 基准回归</h4>
+          <p>6 列递进规格 + 安慰剂列。主模型 β = 0.107（SE = 0.004，p &lt; 0.001），占均值 4.2%。</p>
+        </div>
+      </div>
+      <div class="output-card">
+        <div class="output-card-img">
+          <div class="icon">🔍</div>
+        </div>
+        <div class="output-card-body">
+          <h4>Table 6 异质性分析</h4>
+          <p>东部效应（β = 0.140）≈ 西部（β = 0.084）的 1.67 倍；大县效应较小县高 46%。</p>
+        </div>
+      </div>
+      <div class="output-card">
+        <div class="output-card-img">
+          <div class="icon">⚙️</div>
+        </div>
+        <div class="output-card-body">
+          <h4>Table 5 机制分析</h4>
+          <p>三步中介回归，专利创新渠道传导 5.7% 的 TFP 效应，要素配置效率是主导机制。</p>
+        </div>
+      </div>
+      <div class="output-card">
+        <div class="output-card-img">
+          <div class="icon">✅</div>
+        </div>
+        <div class="output-card-body">
+          <h4>引用核查报告</h4>
+          <p>8 条引用逐一 WebSearch 核实，输出 PASS / WARN / FAIL 判定，防止假引用入稿。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section>
+  <div class="container">
+    <div class="section-label">特性</div>
+    <h2 class="section-title">为什么选 Auto-Eco</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>AER 规范全内嵌</h3>
+        <p>识别策略决策树、FE 组合指南、聚类 SE 规则、WCB 警告均内嵌于 Skill，无需手动查阅。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h3>Staggered DiD 原生支持</h3>
+        <p>自动检测多队列处理，以 Callaway & Sant'Anna (2021) CS-DiD 为主估计，TWFE 为对照。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3>实时文献核查</h3>
+        <p>每条引用 WebSearch 核实，自动拦截 FAIL 引用，告别幻觉引用。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📝</div>
+        <h3>直出可投稿 PDF</h3>
+        <p>LaTeX + 中文字体，编译即得 PDF，无需 Stata、Word 或额外排版工具。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>不做 Specification Searching</h3>
+        <p>主系数不显著时如实报告，通过多结果表和异质性建立论证，保持学术诚信。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔧</div>
+        <h3>模块化，可单独调用</h3>
+        <p>每个阶段均为独立 Skill，可按需单独运行，也可一键 <code>/eco-pipeline</code> 全流程。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Install -->
+<section id="install">
+  <div class="container">
+    <div class="section-label">快速开始</div>
+    <h2 class="section-title">两步即可运行</h2>
+    <p class="section-desc">需要已安装 <a href="https://claude.ai/code" target="_blank" style="color:#e94560;">Claude Code</a> 和 Python 3.8+。</p>
+    <div class="code-block">
+      <div><span class="comment"># 1. 安装 skills</span></div>
+      <div><span class="comment"># Windows</span></div>
+      <div><span class="cmd">cp</span> <span class="path">-r ./skills/*</span> <span class="path">C:/Users/&lt;用户名&gt;/.claude/skills/</span></div>
+      <div>&nbsp;</div>
+      <div><span class="comment"># macOS / Linux</span></div>
+      <div><span class="cmd">cp</span> <span class="path">-r ./skills/*</span> <span class="path">~/.claude/skills/</span></div>
+      <div>&nbsp;</div>
+      <div><span class="comment"># 2. 安装 Python 依赖</span></div>
+      <div><span class="cmd">pip install</span> <span class="arg">pyfixest linearmodels statsmodels pandas numpy scipy openpyxl matplotlib seaborn csdid</span></div>
+      <div>&nbsp;</div>
+      <div><span class="comment"># 3. 在 Claude Code 中运行</span></div>
+      <div><span class="cmd">/eco-pipeline</span> <span class="arg">"你的研究主题"</span> <span class="path">"你的项目目录"</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div>
+    受 <a href="https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep" target="_blank">ARIS</a> 项目启发 ·
+    规范基于 AER 2020–2021 年 16 篇论文提炼 ·
+    <a href="https://github.com/Jasper0122/auto-eco" target="_blank">GitHub</a>
+  </div>
+  <div style="margin-top:10px;font-size:12px;opacity:0.5;">Auto-Eco · 2026</div>
+</footer>
+
+</body>
+</html>
